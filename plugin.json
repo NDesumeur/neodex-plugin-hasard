@@ -3,7 +3,7 @@
   "name": "Hasard",
   "version": "1.3.3",
   "author": "NDesumeur",
-  "description": "Une roue avec tes choix, des dés, pile ou face et un tirage de nombre.",
+  "description": "Laisse le hasard décider : une roue à tourner avec tes propres choix (un par ligne), de 1 à 6 dés de 4 à 100 faces avec leur total, pile ou face, et un nombre entier tiré entre deux bornes. Tes choix de roue sont gardés et synchronisés.",
   "icon": "icon.png",
   "entry": "index.js",
   "view": "hasard",
