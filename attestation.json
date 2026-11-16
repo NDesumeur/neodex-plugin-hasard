@@ -1,9 +1,9 @@
 {
   "pluginId": "neodex.hasard",
   "repo": "NDesumeur/neodex-plugin-hasard",
-  "version": "1.4.0",
-  "sha256": "7e4684b41c9144e2ed53e29275caf212592216bf1438f278e3bed9cf01c3e4d5",
-  "approvedAt": "2026-11-16T04:14:36.572Z",
+  "version": "1.4.1",
+  "sha256": "db19f3562f64e59882817611817504b3e934c6c84423e9ae89fdfdcff0af1256",
+  "approvedAt": "2026-11-16T16:38:49.100Z",
   "neobase": ">=4.0.0",
-  "signature": "6msuPSm430/7sLv9H38UzvrPZBxlh4ge47eVJDq4ddWEKa9L57KUayGqLFzmcp1SkjyhT89kr/80rsirbjqiCw=="
+  "signature": "NGLdFuVlXufRF9FdcAWHNp2/G6BdHPB2jBcpIOXvSXhRPKfXWHa7nqGVuoO25jLG69zHMm39OfQEkmHvdFCjCQ=="
 }
