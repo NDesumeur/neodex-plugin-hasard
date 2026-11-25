@@ -1,7 +1,7 @@
 {
   "id": "neodex.hasard",
   "name": "Hasard",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "author": "NDesumeur",
   "description": "Laisse le hasard décider, en pixel art : une roue avec tes propres choix (et un mode qui retire le gagnant pour tirer un ordre de passage), de 1 à 6 dés de 4 à 100 faces qui roulent sur un tapis avec leur total, une pièce lancée qui tourne, un nombre entier tiré entre deux bornes et des équipes formées au hasard. Chaque tirage a son son. Tes choix sont gardés et synchronisés.",
   "icon": "icon.png",
@@ -10,7 +10,11 @@
   "neobase": ">=4.0.0",
   "type": "app",
   "category": "Jeux",
-  "compatibility": ["windows", "android", "linux"],
+  "compatibility": [
+    "windows",
+    "android",
+    "linux"
+  ],
   "syncMode": "fusion",
   "syncInfo": "Tes listes (roues, tirages).",
   "mobile": true,
@@ -19,5 +23,57 @@
   "sdk": "2.1.0",
   "permissions": [
     "storage"
+  ],
+  "succes": [
+    {
+      "id": "roue",
+      "nom": "La roue tourne",
+      "texte": "Faire tourner la roue"
+    },
+    {
+      "id": "roue100",
+      "nom": "Grand manège",
+      "texte": "Faire tourner la roue 100 fois"
+    },
+    {
+      "id": "des",
+      "nom": "Les dés sont jetés",
+      "texte": "Lancer les dés"
+    },
+    {
+      "id": "double6",
+      "nom": "Double six",
+      "texte": "Faire un double six avec deux dés à 6 faces"
+    },
+    {
+      "id": "d20",
+      "nom": "Coup critique",
+      "texte": "Faire 20 avec un dé à 20 faces",
+      "cache": true
+    },
+    {
+      "id": "cinq",
+      "nom": "Cinq pareils",
+      "texte": "Faire sortir le même chiffre sur au moins 5 dés à 6 faces",
+      "cache": true
+    },
+    {
+      "id": "serie5",
+      "nom": "Pièce têtue",
+      "texte": "Faire 5 fois de suite le même côté à pile ou face"
+    },
+    {
+      "id": "tout",
+      "nom": "Touche-à-tout",
+      "texte": "Essayer la roue, les dés, la pièce, le nombre et les équipes"
+    }
+  ],
+  "records": [
+    {
+      "id": "serie",
+      "nom": "Même côté de suite",
+      "sens": "haut",
+      "format": "nombre"
+    }
   ]
 }

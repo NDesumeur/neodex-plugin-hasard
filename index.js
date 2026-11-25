@@ -312,6 +312,9 @@ export default async function (ctx) {
     if (Object.keys(prefs).length) await folder.write('prefs', prefs);
   }
   const keep = () => { clearTimeout(keep.t); keep.t = setTimeout(() => folder.write('prefs', prefs).catch(() => {}), 500); };
+  // les trophées de NeoDex (3.4.8 et plus) : succès et records déclarés dans plugin.json ; sur un NeoDex plus ancien, rien ne se passe
+  const trophy = id => { ctx.games?.unlock(id).catch(() => {}); };
+  const trophyRecord = (id, v) => { if (v != null && Number.isFinite(+v)) ctx.games?.record(id, +v).catch(() => {}); };
   const T = { k: '#0c0816', k2: '#160e24', fill: '#221632', fillOn: '#2e1e44', hl: '#3a2a52', line: '#62566e', acc: '#ffd84a', accL: '#fff4b0', accS: '#c89a1a', accD: '#3a2a08', acc2: '#e01ec8',
     rivet: '#f0f0f8', btn: '#3a2a52', btnHi: '#62566e', btnLo: '#160e24', btnHov: '#4a3866', btnHovHi: '#82768e', text: '#f4f0f8', muted: '#c0b8cc', gold: '#ffd84a', orange: '#ff8a3a', red: '#ff4a3a', green: '#7ee07a', green2: '#2f8a3a',
     bg: '#100a18', bgDot: '#221632', bgDot2: '#160e24', spark: '#3a2a08', spark2: '#ffd84a',
@@ -376,7 +379,7 @@ export default async function (ctx) {
       const k = Math.min(1, (t - t0) / dur), e = 1 - (1 - k) ** 4; rdAngle = start + turn * e; rdWheel();
       const u = under(rdAngle, A.length); if (u !== last) { last = u; beep(1500, .02, 'square', 0, .02); }  // le cliquetis à chaque part
       if (k < 1) return requestAnimationFrame(step);
-      const i = under(rdAngle, A.length), win = A[i]; flash = i; rdWheel(); big($('rdResult'), win.t.toUpperCase(), T.gold); ding();
+      hzTrophies('spins'); const i = under(rdAngle, A.length), win = A[i]; flash = i; rdWheel(); big($('rdResult'), win.t.toUpperCase(), T.gold); ding();
       setTimeout(() => { flash = -1; if ($('rdRemove').checked) { drawn.push(win.i); order(); } rdWheel(); rdSpinning = false; }, 1100);
     };
     if (fast) { rdAngle += turn; const i = under(rdAngle, A.length); rdSpinning = false; if ($('rdRemove').checked) { drawn.push(A[i].i); order(); } rdWheel(); big($('rdResult'), A[i].t.toUpperCase(), T.gold); return; }  // tirage instantané (vérification)
@@ -432,7 +435,7 @@ export default async function (ctx) {
     if (fast) step(); else { clack(); diceRaf = requestAnimationFrame(step); }
     return dice.map(d => d.final);
   }
-  $('rdRoll').onclick = () => { $('rdRoll').blur(); roll(); };
+  $('rdRoll').onclick = () => { $('rdRoll').blur(); const r = roll(); setTimeout(() => hzTrophies('rolls', r), 1800); };  // après l'arrêt des dés : le succès ne dévoile pas le résultat
 
   /* ---------- la pièce : lancée en l'air, elle tourne (tintement à chaque demi-tour), retombe et rebondit sur la face tirée ---------- */
   let coinRaf = 0;
@@ -461,7 +464,7 @@ export default async function (ctx) {
     };
     if (fast) t = dur - 1; step(); return pile;
   }
-  $('rdFlip').onclick = () => { $('rdFlip').blur(); flip(); };
+  $('rdFlip').onclick = () => { $('rdFlip').blur(); const r = flip(); setTimeout(() => hzTrophies('flips', r), 1500); };
 
   /* ---------- le nombre : les chiffres défilent comme une machine à sous, puis s'arrêtent ---------- */
   const num = s => { const v = parseFloat(String(s).replace(/[\s  ]/g, '').replace(',', '.')); return isFinite(v) ? Math.round(v) : NaN; };
@@ -473,7 +476,7 @@ export default async function (ctx) {
     const step = () => { if (fast || ++k > 22) { big($('rdNumRes'), String(res), T.gold); if (!fast) ding(); return; } big($('rdNumRes'), String(pick()), T.muted); beep(900 + k * 30, .02, 'square', 0, .02); setTimeout(step, 30 + k * 4); };
     step(); return res;
   }
-  $('rdNum').onclick = () => { $('rdNum').blur(); draw(); };
+  $('rdNum').onclick = () => { $('rdNum').blur(); draw(); hzTrophies('draws'); };
 
   /* ---------- les équipes : les noms mélangés puis distribués un par un, pour des équipes de tailles égales (à un près) ---------- */
   const TEAM_C = ['#ffd84a', '#5ac8ff', '#ff6a8a', '#7ee07a', '#c88aff', '#ff9a3c', '#7fe0ee', '#e8e4ec'];
@@ -489,8 +492,17 @@ export default async function (ctx) {
     $('rdTeamList').replaceChildren(...t.map((m, i) => { const c = el('div', 'rdTeam'); c.style.setProperty('--c', TEAM_C[i % TEAM_C.length]); c.append(el('b', '', 'ÉQUIPE ' + (i + 1)), ...m.map(x => el('div', '', x))); return c; }));
     t.forEach((_, i) => beep(523 * 2 ** (i * 2 / 12), .1, 'triangle', 0, .035, i * .06)); return t;
   }
-  $('rdTeams').onclick = () => { $('rdTeams').blur(); teams(); };
+  $('rdTeams').onclick = () => { $('rdTeams').blur(); if (teams()) hzTrophies('teams'); };
 
+  // les trophées, tirés des statistiques et des records gardés (aussi à l'ouverture : ce qui a été fait avant compte)
+  function hzTrophies(kind, v) {  // kind : le geste qui vient d'être fait ; v : les dés tirés, ou pile (vrai) / face (faux)
+    const S = prefs.stats ??= {spins: 0, rolls: 0, flips: 0, draws: 0, teams: 0, row: 0, side: null, rowBest: 0};
+    S[kind] = (S[kind] || 0) + 1;
+    if (kind === 'rolls') { const f = +$('rdFaces').value; if (f === 6 && v.length === 2 && v.every(x => x === 6)) trophy('double6'); if (f === 20 && v.includes(20)) trophy('d20'); if (f === 6 && v.length >= 5 && v.every(x => x === v[0])) trophy('cinq'); }
+    if (kind === 'flips') { S.row = S.side === v ? S.row + 1 : 1; S.side = v; S.rowBest = Math.max(S.rowBest || 0, S.row); trophyRecord('serie', S.rowBest); if (S.row >= 5) trophy('serie5'); }
+    if (S.spins) trophy('roue'); if (S.spins >= 100) trophy('roue100'); if (S.rolls) trophy('des'); if (['spins', 'rolls', 'flips', 'draws', 'teams'].every(k => S[k])) trophy('tout');
+    keep();
+  }
   // vérification : la part sous la flèche, le tirage sans remise, les équipes égales, dés, pièce et nombre dans leurs bornes
   function rdCheck() {
     const bad = [];

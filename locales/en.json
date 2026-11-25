@@ -100,5 +100,22 @@
  "Emma": "Emma",
  "Farid": "Farid",
  "ÉQUIPE": "TEAM",
- "tous passés": "all done"
+ "tous passés": "all done",
+ "La roue tourne": "The wheel turns",
+ "Faire tourner la roue": "Spin the wheel",
+ "Grand manège": "Merry-go-round",
+ "Faire tourner la roue 100 fois": "Spin the wheel 100 times",
+ "Les dés sont jetés": "The die is cast",
+ "Lancer les dés": "Roll the dice",
+ "Double six": "Double six",
+ "Faire un double six avec deux dés à 6 faces": "Roll a double six with two 6-sided dice",
+ "Coup critique": "Critical hit",
+ "Faire 20 avec un dé à 20 faces": "Roll a 20 on a 20-sided die",
+ "Cinq pareils": "Five of a kind",
+ "Faire sortir le même chiffre sur au moins 5 dés à 6 faces": "Roll the same number on at least 5 six-sided dice",
+ "Pièce têtue": "Stubborn coin",
+ "Faire 5 fois de suite le même côté à pile ou face": "Get the same side 5 times in a row at heads or tails",
+ "Touche-à-tout": "Jack of all trades",
+ "Essayer la roue, les dés, la pièce, le nombre et les équipes": "Try the wheel, the dice, the coin, the number and the teams",
+ "Même côté de suite": "Same side in a row"
 }
